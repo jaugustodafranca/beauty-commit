@@ -13,7 +13,7 @@ import { showConfigMenu } from "./utils/configMenu.js";
 console.log(chalk.magenta("\n✨ 💅 Beauty Commit 💫 ✨\n"));
 console.log(chalk.cyan("A CLI tool to help standardize git commit messages\n"));
 
-program.name("commit").version("1.1.1");
+program.name("commit").version("1.1.2");
 
 program
   .command("config")
