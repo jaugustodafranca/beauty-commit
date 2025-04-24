@@ -26,14 +26,15 @@ This will guide you through an interactive process:
 
 1. Check if there are staged files for commit
 2. Select the type of commit (feat, fix, refactor, etc.)
-3. Select a repository from your configured list (optional)
-4. Enter an optional ticket number
+3. Select a project (optional)
+4. Enter an optional ticket number (optional)
 5. Enter a commit description
-6. Create a commit with the format: `type(repository): [TICKET-123] description`
+
+Create a commit with the format: `type(project): [TICKET-123] description`
 
 > **Note**: The command automatically checks if there are staged files for commit. If there are none, it will show an error message and not proceed with the process.
 
-### 2. Configure repositories
+### 2. Configure project
 
 ```bash
 commit config
@@ -41,9 +42,9 @@ commit config
 
 This will show an interactive menu where you can:
 
-- List configured repositories
-- Add a new repository
-- Remove a repository
+- List configured project
+- Add a new project
+- Remove a project
 - Exit
 
 ## License

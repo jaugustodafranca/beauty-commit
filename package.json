@@ -1,6 +1,6 @@
 {
   "name": "beauty-commit",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A CLI tool to help standardize git commit messages",
   "main": "src/index.js",
   "type": "module",

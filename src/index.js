@@ -4,11 +4,11 @@ import { program } from "commander";
 import chalk from "chalk";
 import inquirer from "inquirer";
 
-import { listRepositories } from "./utils/repositories.js";
+import { listProjects } from "./utils/projects.js";
 import { createCommit } from "./utils/commit.js";
 import { hasStagedFiles } from "./utils/git.js";
 import { COMMIT_TYPES } from "./utils/constants.js";
-import { showRepositoriesMenu } from "./utils/repositoriesMenu.js";
+import { showConfigMenu } from "./utils/configMenu.js";
 
 console.log(chalk.magenta("\n✨ 💅 Beauty Commit 💫 ✨\n"));
 console.log(chalk.cyan("A CLI tool to help standardize git commit messages\n"));
@@ -17,8 +17,8 @@ program.name("commit").version("1.0.0");
 
 program
   .command("config")
-  .description("Configure repositories")
-  .action(showRepositoriesMenu);
+  .description("Configure projects")
+  .action(showConfigMenu);
 
 program.action(async () => {
   try {
@@ -39,11 +39,11 @@ program.action(async () => {
       },
     ]);
 
-    const { useRepository } = await inquirer.prompt([
+    const { useProject } = await inquirer.prompt([
       {
         type: "list",
-        name: "useRepository",
-        message: "Do you want to specify a repository?",
+        name: "useProject",
+        message: "Do you want to specify a Project?",
         choices: [
           { name: "Yes", value: true },
           { name: "No", value: false },
@@ -52,13 +52,13 @@ program.action(async () => {
     ]);
 
     let repoName = "";
-    if (useRepository) {
-      const repositories = listRepositories();
+    if (useProject) {
+      const projects = listProjects();
 
-      if (repositories.length === 0) {
+      if (projects.length === 0) {
         console.log(
           chalk.yellow(
-            '\nNo repositories configured. Please run "commit config" first.'
+            '\nNo projects configured. Please run "commit config" first.'
           )
         );
 
@@ -66,7 +66,7 @@ program.action(async () => {
           {
             type: "list",
             name: "continueWithout",
-            message: "Continue without repository?",
+            message: "Continue without Project?",
             choices: [
               { name: "Yes", value: true },
               { name: "No", value: false },
@@ -82,8 +82,8 @@ program.action(async () => {
           {
             type: "list",
             name: "selectedRepo",
-            message: "Select repository:",
-            choices: repositories.map((repo) => ({ name: repo, value: repo })),
+            message: "Select Project:",
+            choices: projects.map((repo) => ({ name: repo, value: repo })),
           },
         ]);
         repoName = selectedRepo;

@@ -1,6 +1,6 @@
 import { execSync } from "child_process";
 import chalk from "chalk";
-import { getConfig } from "./configStorage.js";
+import { getConfig } from "./configFileManager.js";
 import { hasStagedFiles } from "./git.js";
 
 export const createCommit = async (
@@ -11,8 +11,8 @@ export const createCommit = async (
 ) => {
   if (repoName) {
     const config = getConfig();
-    if (!config.repositories.includes(repoName)) {
-      throw new Error("Repository not found in configuration.");
+    if (!config.projects.includes(repoName)) {
+      throw new Error("Project not found in configuration.");
     }
   }
 

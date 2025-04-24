@@ -12,17 +12,36 @@ const ensureConfigDir = () => {
   }
 };
 
+const migrateConfig = (config) => {
+  if (config.repositories) {
+    config.projects = [...config.repositories];
+    delete config.repositories;
+    console.log(
+      chalk.cyan("Migrated configuration from 'repositories' to 'projects'")
+    );
+    saveConfig(config);
+    return config;
+  }
+
+  if (!config.projects) {
+    config.projects = [];
+  }
+
+  return config;
+};
+
 export const getConfig = () => {
   ensureConfigDir();
   if (!fs.existsSync(CONFIG_FILE)) {
-    return { repositories: [] };
+    return { projects: [] };
   }
   try {
     const configData = fs.readFileSync(CONFIG_FILE, "utf8");
-    return JSON.parse(configData);
+    const config = JSON.parse(configData);
+    return migrateConfig(config);
   } catch (error) {
     console.error(chalk.red("Error reading config file:"), error.message);
-    return { repositories: [] };
+    return { projects: [] };
   }
 };
 
