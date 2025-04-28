@@ -1,12 +1,41 @@
+import chalk from "chalk";
+
 export const COMMIT_TYPES = [
-  { name: "feat: New feature", value: "feat" },
-  { name: "fix: Bug fix", value: "fix" },
-  { name: "refactor: Code refactoring", value: "refactor" },
-  { name: "chore: Build process or tooling changes", value: "chore" },
-  { name: "revert: Reverts a previous commit", value: "revert" },
-  { name: "style: Code style changes (formatting, etc)", value: "style" },
-  { name: "ci: CI related changes", value: "ci" },
-  { name: "perf: Performance improvements", value: "perf" },
-  { name: "docs: Documentation changes", value: "docs" },
-  { name: "test: Adding or updating tests", value: "test" },
+  {
+    message: `${chalk.cyan("feat")}: New feature`,
+    value: "feat",
+  },
+  { message: `${chalk.cyan("fix")}: Bug fix`, value: "fix" },
+  {
+    message: `${chalk.cyan("refactor")}: Code refactoring`,
+    value: "refactor",
+  },
+  {
+    message: `${chalk.cyan("chore")}: Build process or tooling changes`,
+    value: "chore",
+  },
+  {
+    message: `${chalk.cyan("revert")}: Reverts a previous commit`,
+    value: "revert",
+  },
+  {
+    message: `${chalk.cyan("style")}: Code style changes (formatting, etc)`,
+    value: "style",
+  },
+  {
+    message: `${chalk.cyan("ci")}: CI related changes`,
+    value: "ci",
+  },
+  {
+    message: `${chalk.cyan("perf")}: Performance improvements`,
+    value: "perf",
+  },
+  {
+    message: `${chalk.cyan("docs")}: Documentation changes`,
+    value: "docs",
+  },
+  {
+    message: `${chalk.cyan("test")}: Adding or updating tests`,
+    value: "test",
+  },
 ];

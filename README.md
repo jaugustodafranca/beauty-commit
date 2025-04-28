@@ -27,8 +27,9 @@ This will guide you through an interactive process:
 1. Check if there are staged files for commit
 2. Select the type of commit (feat, fix, refactor, etc.)
 3. Choose whether to include the project name (optional)
-   - If "Yes", the project name will be automatically read from the `package.json` in the root of your project.
+   - The project name will be automatically read from the `package.json` in the root of your project but you can also edit.
 4. Enter an optional ticket number
+   - The ticket will be automatically read from branch name based in the format `text/TEAM-123`, in other words, the ticket should be after `/`. In this example the suggestion will be `TEAM-123`
 5. Enter a commit description
 
 The commit message will be formatted as: `type(project): [TICKET-123] description`

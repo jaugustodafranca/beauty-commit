@@ -2,12 +2,17 @@
 
 import { program } from "commander";
 import chalk from "chalk";
-import inquirer from "inquirer";
+import enquirer from "enquirer";
+const { Select, Input } = enquirer;
 
 import { createCommit } from "./utils/commit.js";
 import { hasStagedFiles } from "./utils/git.js";
 import { COMMIT_TYPES } from "./utils/constants.js";
 import { getProjectName } from "./utils/getProjectName.js";
+import {
+  getCurrentBranchName,
+  extractTicketFromBranch,
+} from "./utils/gitHelpers.js";
 
 console.log(chalk.magenta("\n✨ 💅 Beauty Commit 💫 ✨\n"));
 console.log(chalk.cyan("A CLI tool to help standardize git commit messages\n"));
@@ -24,59 +29,40 @@ program.action(async () => {
       return;
     }
 
-    const { type } = await inquirer.prompt([
-      {
-        type: "list",
-        name: "type",
-        message: "Select the type of commit:",
-        choices: COMMIT_TYPES,
-      },
-    ]);
+    // Select commit type
+    const typePrompt = new Select({
+      name: "type",
+      message: "Select the type of commit:",
+      choices: COMMIT_TYPES,
+    });
+    const type = await typePrompt.run();
 
-    const { useProject } = await inquirer.prompt([
-      {
-        type: "list",
-        name: "useProject",
-        message: "Do you want to specify a Project?",
-        choices: [
-          { name: "Yes", value: true },
-          { name: "No", value: false },
-        ],
-      },
-    ]);
+    // Project name (suggestion)
+    const suggestedProjectName = getProjectName();
+    const projectPrompt = new Input({
+      name: "repoName",
+      message: "Enter project name (optional):",
+      initial: suggestedProjectName,
+    });
+    const repoName = await projectPrompt.run();
 
-    let repoName = "";
-    if (useProject) {
-      repoName = getProjectName();
-      if (!repoName) {
-        console.log(
-          chalk.red(
-            "\nCould not find project name in package.json. Commit will proceed without project name.\n"
-          )
-        );
-      }
-    }
+    // Ticket number (suggestion from branch)
+    const branchName = getCurrentBranchName();
+    const suggestedTicket = extractTicketFromBranch(branchName);
+    const ticketPrompt = new Input({
+      name: "ticketNumber",
+      message: "Enter ticket number (optional):",
+      initial: suggestedTicket,
+    });
+    const ticketNumber = await ticketPrompt.run();
 
-    const { ticketNumber } = await inquirer.prompt([
-      {
-        type: "input",
-        name: "ticketNumber",
-        message: "Enter ticket number (optional):",
-        default: "",
-      },
-    ]);
-
-    const { message } = await inquirer.prompt([
-      {
-        type: "input",
-        name: "message",
-        message: "Enter commit description:",
-        validate: (input) => {
-          if (!input) return "Description is required";
-          return true;
-        },
-      },
-    ]);
+    // Commit message
+    const messagePrompt = new Input({
+      name: "message",
+      message: "Enter commit description:",
+      validate: (input) => (input ? true : "Description is required"),
+    });
+    const message = await messagePrompt.run();
 
     await createCommit(type, repoName, ticketNumber, message);
   } catch (error) {
