@@ -4,21 +4,15 @@ import { program } from "commander";
 import chalk from "chalk";
 import inquirer from "inquirer";
 
-import { listProjects } from "./utils/projects.js";
 import { createCommit } from "./utils/commit.js";
 import { hasStagedFiles } from "./utils/git.js";
 import { COMMIT_TYPES } from "./utils/constants.js";
-import { showConfigMenu } from "./utils/configMenu.js";
+import { getProjectName } from "./utils/getProjectName.js";
 
 console.log(chalk.magenta("\n✨ 💅 Beauty Commit 💫 ✨\n"));
 console.log(chalk.cyan("A CLI tool to help standardize git commit messages\n"));
 
 program.name("commit").version("1.1.2");
-
-program
-  .command("config")
-  .description("Configure projects")
-  .action(showConfigMenu);
 
 program.action(async () => {
   try {
@@ -53,40 +47,13 @@ program.action(async () => {
 
     let repoName = "";
     if (useProject) {
-      const projects = listProjects();
-
-      if (projects.length === 0) {
+      repoName = getProjectName();
+      if (!repoName) {
         console.log(
-          chalk.yellow(
-            '\nNo projects configured. Please run "commit config" first.'
+          chalk.red(
+            "\nCould not find project name in package.json. Commit will proceed without project name.\n"
           )
         );
-
-        const { continueWithout } = await inquirer.prompt([
-          {
-            type: "list",
-            name: "continueWithout",
-            message: "Continue without Project?",
-            choices: [
-              { name: "Yes", value: true },
-              { name: "No", value: false },
-            ],
-          },
-        ]);
-
-        if (!continueWithout) {
-          return;
-        }
-      } else {
-        const { selectedRepo } = await inquirer.prompt([
-          {
-            type: "list",
-            name: "selectedRepo",
-            message: "Select Project:",
-            choices: projects.map((repo) => ({ name: repo, value: repo })),
-          },
-        ]);
-        repoName = selectedRepo;
       }
     }
 

@@ -1,6 +1,5 @@
 import { execSync } from "child_process";
 import chalk from "chalk";
-import { getConfig } from "./configFileManager.js";
 import { hasStagedFiles } from "./git.js";
 
 export const createCommit = async (
@@ -9,13 +8,6 @@ export const createCommit = async (
   ticketNumber = "",
   message
 ) => {
-  if (repoName) {
-    const config = getConfig();
-    if (!config.projects.includes(repoName)) {
-      throw new Error("Project not found in configuration.");
-    }
-  }
-
   if (!hasStagedFiles()) {
     throw new Error(
       'No files staged for commit. Use "git add <file>" to stage files first.'
